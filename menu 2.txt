@@ -1,4 +1,4 @@
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/jvdanike03/Menu-Ant-rp/refs/heads/main/menu%20ant%20rp.txt?token=GHSAT0AAAAAADBZOIT7K2RVL6EJBK3VJHVWZ7TSTLQ", true))()
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/jvdanike03/Menu-Ant-rp/refs/heads/main/menu%20ant%20rp.txt?token=GHSAT0AAAAAADBZOIT76FIFQEFYPK5K3MR6Z7TTCYA", true))()
 
 function Algema()
     while _G.Algema == true do
