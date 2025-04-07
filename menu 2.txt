@@ -1,0 +1,362 @@
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/jvdanike03/Menu-Ant-rp/refs/heads/main/menu%20ant%20rp.txt?token=GHSAT0AAAAAADBZOIT7K2RVL6EJBK3VJHVWZ7TSTLQ", true))()
+
+function Algema()
+    while _G.Algema == true do
+                local event = game:GetService("ReplicatedStorage").Arrest
+        local distance = 10
+         
+         
+        event.OnServerEvent:Connect(function(policeman, arrested) -- when the event gets fired, the server will do the following commands:
+            if(arrested.Team ~= game.Teams.Police) then --if the player's team is not police then
+                if(policeman:DistanceFromCharacter(arrested.Character:WaitForChild("HumanoidRootPart").Position) > distance) then
+                    return nil
+                end
+                if(arrested.BadArea.Value == true and arrested.Team == game.Teams.Prisoners) then --If he is a prisoner in the area he is not allowed to.
+                    arrested.Character:WaitForChild("Humanoid").WalkSpeed = 0 --Set the arrested person walk speed to 0
+                    arrested.Character:WaitForChild("Humanoid").JumpPower = 0 --Set the arrested person jump power to 0
+                    local clone1 = game:GetService("ServerStorage").Handcuff:Clone() --Clone the handcuff cylinder we made
+                    local clone2 = game:GetService("ServerStorage").Handcuff:Clone() --Clone the handcuff cylinder we made again
+                    clone1.Parent = arrested.Character --Set it's parent to the character
+                    clone2.Parent = arrested.Character --Set it's parent to the character
+                    local motor = Instance.new("Motor6D", arrested.Character) --Create a new motor 6d and set it's parent to the character
+                    local motor2 = Instance.new("Motor6D", arrested.Character) --Create a new motor 6d again and set it's parent to the character
+                    motor.Part0 = arrested.Character.LeftHand --The part0 of the motor 6d is the leftHand
+                    motor.Part1 = clone1 --The part0 of the motor 6d is the handcuff clone 1
+                    motor2.Part0 = arrested.Character.RightHand --The part0 of the motor 6d 2 is the rightHand
+                    motor2.Part1 = clone2 --The part0 of the motor 6d 3 is the handcuff clone 2
+                    local chain = Instance.new("RopeConstraint", arrested.Character) --Create a new rope constraint inside the character
+                    local atta1 = Instance.new("Attachment", clone1) --Create a new attachment inside the clone1
+                    local atta2 = Instance.new("Attachment", clone2)--Create a new attachment inside the clone2
+                    chain.Length = 1 --Set the rope's length to 1
+                    chain.Thickness = 0.2 --Set the rope's thickness to 0.2
+                    chain.Attachment0 = atta1 --The rope's attachment 1 is the atta1 attachment
+                    chain.Attachment1 = atta2 --The rope's attachment 2 is the atta2 attachment
+                    chain.Color = BrickColor.new("Light stone grey") --Set the rope color to gray
+                    chain.Visible = true --Make it visible
+                    arrested.BadArea.Value = false
+                    game.ReplicatedStorage.ArrestAnim:FireClient(arrested) --Fire the client fromthe event we created
+                    wait(6) --Cooldown between arresting and playing animation
+                    arrested.Team = game.Teams.Prisoners --change the team of the player to prisoner
+                    arrested:LoadCharacter() --respawn him
+                elseif(arrested.Team == game.Teams.Criminals) then  --If he is a criminal, the area he is inside does not matter, he will get arrested
+                    arrested.Character:WaitForChild("Humanoid").WalkSpeed = 0 --Set the arrested person walk speed to 0
+                    arrested.Character:WaitForChild("Humanoid").JumpPower = 0 --Set the arrested person jump power to 0
+                    local clone1 = game:GetService("ServerStorage").Handcuff:Clone() --Clone the handcuff cylinder we made
+                    local clone2 = game:GetService("ServerStorage").Handcuff:Clone() --Clone the handcuff cylinder we made again
+                    clone1.Parent = arrested.Character --Set it's parent to the character
+                    clone2.Parent = arrested.Character --Set it's parent to the character
+                    local motor = Instance.new("Motor6D", arrested.Character) --Create a new motor 6d and set it's parent to the character
+                    local motor2 = Instance.new("Motor6D", arrested.Character) --Create a new motor 6d again and set it's parent to the character
+                    motor.Part0 = arrested.Character.LeftHand --The part0 of the motor 6d is the leftHand
+                    motor.Part1 = clone1 --The part0 of the motor 6d is the handcuff clone 1
+                    motor2.Part0 = arrested.Character.RightHand --The part0 of the motor 6d 2 is the rightHand
+                    motor2.Part1 = clone2 --The part0 of the motor 6d 3 is the handcuff clone 2
+                    local chain = Instance.new("RopeConstraint", arrested.Character) --Create a new rope constraint inside the character
+                    local atta1 = Instance.new("Attachment", clone1) --Create a new attachment inside teh clone1
+                    local atta2 = Instance.new("Attachment", clone2)--Create a new attachment inside teh clone2
+                    chain.Length = 1 --Set the rope's length to 1
+                    chain.Thickness = 0.2 --Set the rope's thickness to 0.2
+                    chain.Attachment0 = atta1 --The rope's attachment 1 is the atta1 attachment
+                    chain.Attachment1 = atta2 --The rope's attachment 2 is the atta2 attachment
+                    chain.Color = BrickColor.new("Light stone grey") --Set the rope color to gray
+                    chain.Visible = true --Make it visible
+                    game.ReplicatedStorage.ArrestAnim:FireClient(arrested) --Fire the client fromthe event we created
+                    arrested.BadArea.Value = false
+                    wait(6) --Cooldown between arresting and playing animation
+                    arrested.Team = game.Teams.Prisoners --change the team of the player to prisoner
+                    arrested:LoadCharacter() --respawn him
+                end
+            end
+        end)
+    end
+    end
+
+-- Janela Principal
+local mainW = library:CreateWindow({text = "MadMenu Anti RP"})
+local miscW = library:CreateWindow({text = "Misc"})
+local weaponsW = library:CreateWindow({text = "Armas"})
+local playerW = library:CreateWindow({text = "Jogador"})
+local utilityW = library:CreateWindow({text = "Utilitários"})
+
+-- Misc Window
+miscW:AddBox("Qt. De Dinheiro", function(object, focus)
+    if not focus then
+        local newValue = tonumber(object.Text)
+        if newValue then
+            Quant = newValue
+        else
+            warn("Insira um número válido!")
+        end
+    end
+end)
+
+miscW:AddButton("Puxar Dinheiro", function()
+    local Evt_R = game:service('ReplicatedStorage')["ACS_Engine"].Events:FindFirstChild("Refil")
+    for _, v in pairs(game:GetDescendants()) do
+        if v:IsA("IntValue") or v:IsA("NumberValue") then
+            Evt_R:FireServer(v, -(Quant - v.Value))
+        end
+    end
+end)
+
+miscW:AddButton("Puxar Dinheiro (Bypass)", function()
+    while true do
+        task.wait()
+    
+        for i = 1, 10 do
+            local Evt_R = game:GetService("ReplicatedStorage")["ACS_Engine"].Events:FindFirstChild("Refil")
+            local Quant = 100
+    
+            if Evt_R then
+                for _, v in pairs(game:GetDescendants()) do
+                    if v:IsA("IntValue") or v:IsA("NumberValue") then
+                        Evt_R:FireServer(v, -(Quant - v.Value))
+                    end
+                end
+            else
+                break
+            end
+        end
+    end    
+end)
+
+miscW:AddButton("Anti Algema", function() Algema() end)
+
+miscW:AddButton("Puxar Algema", function()
+    for i, v in pairs(game:GetDescendants()) do
+        if v:IsA('Tool') and v.Name == "Algema" then
+            v.Parent = game:GetService('Players').LocalPlayer.Backpack
+        end
+    end
+end)
+
+miscW:AddButton("Deletar Carros", function()
+    for i, v in pairs(game.Workspace:GetChildren()) do
+        game.ReplicatedStorage.DeleteCar:FireServer(v)
+    end
+end)
+
+-- Weapons Window
+weaponsW:AddButton("Puxar Armas v1", function()
+    for i, v in pairs(game:GetDescendants()) do
+        if v:IsA('Tool') then
+            v.Parent = game:GetService('Players').LocalPlayer.Backpack
+        end
+    end
+end)
+
+weaponsW:AddButton("Puxar Armas v2", function()
+    for i, v in pairs(game.Players:GetDescendants()) do
+        if v:IsA("Tool") then
+            v.Parent = game.Players.LocalPlayer.Backpack
+        end
+    end
+end)
+
+weaponsW:AddButton("Munição infinita (Qualquer EB sem acs)", function()
+    local backpack = game.Players.LocalPlayer:FindFirstChild("Backpack")
+    if backpack then
+        for _, v in ipairs(backpack:GetDescendants()) do
+            if v.Name == "Ammo" then
+                v.MaxValue = math.huge
+                v.Value = math.huge
+            end
+        end
+    else
+        warn("Backpack não encontrado!")
+    end    
+end)
+
+weaponsW:AddButton("Remover Armas", function()
+    local player = game:GetService("Players").LocalPlayer
+    local backpack = player.Backpack
+    for _, item in pairs(backpack:GetChildren()) do
+        if item:IsA("Tool") then
+            item:Destroy()
+        end
+    end
+end)
+
+-- Player Window
+
+playerW:AddBox("Teleportar para", function(input, focus)
+    if not focus then
+        local players = game:GetService("Players")
+        local localPlayer = players.LocalPlayer
+        local targetPlayer = nil
+
+        -- Procurar jogador correspondente ao input
+        for _, player in pairs(players:GetPlayers()) do
+            if string.find(string.lower(player.DisplayName), string.lower(input)) or 
+               string.find(string.lower(player.Name), string.lower(input)) then
+                targetPlayer = player
+                break
+            end
+        end
+
+        if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            local targetPosition = targetPlayer.Character.HumanoidRootPart.Position
+            if localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                localPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(targetPosition)
+            end
+        end
+    end
+end)
+
+playerW:AddButton("Stamina infinita", function()
+    local cfg = require(game:GetService('ReplicatedStorage')['ACS_Engine'].GameRules.Config)
+    cfg.EnableStamina = false
+end)
+
+playerW:AddButton("Sem dano de queda", function()
+    local cfg = require(game:GetService('ReplicatedStorage')['ACS_Engine'].GameRules.Config)
+    cfg.EnableFallDamage = false
+end)
+
+playerW:AddButton("Sem cooldown de pulo", function()
+    local cfg = require(game:GetService('ReplicatedStorage')['ACS_Engine'].GameRules.Config)
+    cfg.AntiBunnyHop = false
+end)
+
+playerW:AddButton("Anti Ragdoll", function()
+    spawn(function()
+        while game:GetService("RunService").Heartbeat:Wait() do
+            local chr = game.Players.LocalPlayer.Character
+            for _, v in pairs(chr:GetChildren()) do
+                if v:IsA("BallSocketConstraint") or v:IsA("HingeConstraint") or v.Name == "Controls" or v.Name == "Local Ragdoll" then
+                    v:Destroy()
+                end
+            end
+        end
+    end)
+end)
+
+-- Utility Window
+utilityW:AddButton("Anti kick", function()
+    local PlayersService = game:GetService('Players')
+    local Metatable = getrawmetatable(game)
+    local OldMetatable = Metatable.__namecall
+    local Protect = newcclosure or protect_function
+    setreadonly(Metatable, false)
+    Metatable.__namecall = Protect(function(self, ...)
+        if getnamecallmethod() == 'Kick' then
+            wait(9e9)
+            return
+        end
+        return OldMetatable(self, ...)
+    end)
+    hookfunction(PlayersService.LocalPlayer.Kick, Protect(function()
+        wait(9e9)
+    end))
+end)
+
+utilityW:AddButton("Anti Fling", function()
+          	-- // Constants \\ --
+-- [ Services ] --
+local Services = setmetatable({}, {__index = function(Self, Index)
+    local NewService = game.GetService(game, Index)
+    if NewService then
+    Self[Index] = NewService
+    end
+    return NewService
+    end})
+    
+    -- [ LocalPlayer ] --
+    local LocalPlayer = Services.Players.LocalPlayer
+    
+    -- // Functions \\ --
+    local function PlayerAdded(Player)
+       local Detected = false
+       local Character;
+       local PrimaryPart;
+    
+       local function CharacterAdded(NewCharacter)
+           Character = NewCharacter
+           repeat
+               wait()
+               PrimaryPart = NewCharacter:FindFirstChild('HumanoidRootPart')
+           until PrimaryPart
+           Detected = false
+       end
+    
+       CharacterAdded(Player.Character or Player.CharacterAdded:Wait())
+       Player.CharacterAdded:Connect(CharacterAdded)
+       Services.RunService.Heartbeat:Connect(function()
+           if (Character and Character:IsDescendantOf(workspace)) and (PrimaryPart and PrimaryPart:IsDescendantOf(Character)) then
+               if PrimaryPart.AssemblyAngularVelocity.Magnitude > 50 or PrimaryPart.AssemblyLinearVelocity.Magnitude > 100 then
+                   if Detected == false then
+                       game.StarterGui:SetCore('ChatMakeSystemMessage', {
+                           Text = 'Fling Exploit detected, Player: ' .. tostring(Player);
+                           Color = Color3.fromRGB(255, 200, 0);
+                       })
+                   end
+                   Detected = true
+                   for i,v in ipairs(Character:GetDescendants()) do
+                       if v:IsA('BasePart') then
+                           v.CanCollide = false
+                           v.AssemblyAngularVelocity = Vector3.new(0, 0, 0)
+                           v.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+                           v.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0)
+                       end
+                   end
+                   PrimaryPart.CanCollide = false
+                   PrimaryPart.AssemblyAngularVelocity = Vector3.new(0, 0, 0)
+                   PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+                   PrimaryPart.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0)
+               end
+           end
+       end)
+    end
+    
+    -- // Event Listeners \\ --
+    for i,v in ipairs(Services.Players:GetPlayers()) do
+       if v ~= LocalPlayer then
+           PlayerAdded(v)
+       end
+    end
+    Services.Players.PlayerAdded:Connect(PlayerAdded)
+    
+    local LastPosition = nil
+    Services.RunService.Heartbeat:Connect(function()
+       pcall(function()
+           local PrimaryPart = LocalPlayer.Character.PrimaryPart
+           if PrimaryPart.AssemblyLinearVelocity.Magnitude > 250 or PrimaryPart.AssemblyAngularVelocity.Magnitude > 250 then
+               PrimaryPart.AssemblyAngularVelocity = Vector3.new(0, 0, 0)
+               PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+               PrimaryPart.CFrame = LastPosition
+    
+               game.StarterGui:SetCore('ChatMakeSystemMessage', {
+                   Text = 'You were flung. Neutralizing velocity.';
+                   Color = Color3.fromRGB(255, 0, 0);
+               })
+           elseif PrimaryPart.AssemblyLinearVelocity.Magnitude < 50 or PrimaryPart.AssemblyAngularVelocity.Magnitude > 50 then
+               LastPosition = PrimaryPart.CFrame
+           end
+       end)
+    end)
+end)
+
+utilityW:AddButton("Som de tiro", function()
+        for _, player in pairs(game.Players:GetPlayers()) do
+            game:GetService('ReplicatedStorage')['ACS_Engine'].Events.Whizz:FireServer(player)
+        end
+end)
+
+utilityW:AddButton("Bugar Som", function()
+    while task.wait() do
+        for _, player in pairs(game.Players:GetPlayers()) do
+            game:GetService('ReplicatedStorage')['ACS_Engine'].Events.Whizz:FireServer(player)
+        end
+    end
+end)
+
+local UIS = game:GetService("UserInputService")
+local UiLibrary = game.CoreGui:FindFirstChild("UILibrary")
+
+if UiLibrary then
+    UIS.InputBegan:Connect(function(input, gp)
+        if not gp and input.KeyCode == Enum.KeyCode.RightShift then
+            UiLibrary.Enabled = not UiLibrary.Enabled
+        end
+    end)
+end
